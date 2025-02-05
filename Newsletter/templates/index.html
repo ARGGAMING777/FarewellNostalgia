@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Newsletter Subscription</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="Photos/PicHubStudios-Circle.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <body>
+        <div id="cookieConsent" style="display: none;">
+          <div id="cookieConsentPopup">
+              <p>This website doesn’t store any cookies or data on your device.</p>
+              <button id="cookieConsentButton">Got it!</button>
+          </div>
+      </div>
+      
+      
+      
+      <!-- JavaScript -->
+      <script>
+          document.addEventListener("DOMContentLoaded", function () {
+              var consent = document.getElementById("cookieConsent");
+              var consentButton = document.getElementById("cookieConsentButton");
+      
+              // Check if the user has already seen the consent popup
+              if (!sessionStorage.getItem("cookieConsentSeen")) {
+                  // Show the consent popup
+                  consent.style.display = "block";
+              }
+      
+              // Hide the popup and set session storage item when the button is clicked
+              consentButton.onclick = function () {
+                  consent.style.display = "none";
+                  sessionStorage.setItem("cookieConsentSeen", "true");
+              };
+          });
+      </script>
+
+<div class="visme_d" data-title="Newsletter Subscription" data-url="mx8036z8-newsletter-subscription" data-domain="forms" data-full-page="false" data-min-height="500px" data-form-id="104066"></div><script src="https://static-bundles.visme.co/forms/vismeforms-embed.js"></script>
+
+
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function goHome() {
+            window.location.href = 'https://pichub.npatel.co.uk'; // Replace with your homepage URL
+        }
+
+        document.getElementById('subscriptionForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const privacyPolicy = document.getElementById('privacyPolicy').checked;
+
+            // Prepare data to send
+            const formData = {
+                name: name,
+                email: email,
+                privacyPolicy: privacyPolicy
+            };
+
+            // Send data to the backend
+            fetch('https://tick-full-lobster.ngrok-free.app/', {  // Replace with your actual URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            }).then(response => response.text())
+              .then(result => {
+                  document.getElementById('message').textContent = result;
+              }).catch(error => {
+                  console.error('Error:', error);
+                  document.getElementById('message').textContent = 'An error occurred.';
+              });
+        });
+    </script>
+</body>
+</html>

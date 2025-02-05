@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Farewell Nostalgia</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="header.footer.js"></script>
+    <link rel="stylesheet" href="header.footer.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:900" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="Company Logo\PicHubStudios-Circle.png">
+</head>
+
+<body>
+  <div id="cookieConsent" style="display: none;">
+    <div id="cookieConsentPopup">
+        <p>This website doesn’t store any cookies or data on your device.</p>
+        <button id="cookieConsentButton">Got it!</button>
+    </div>
+</div>
+
+
+
+        <header>
+            <div class="logo">
+                <img src="Company Logo\PicHubStudios-Circle.png" alt="Logo">
+                <span>Farewell Nostalgia</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a class="active" href="index.html">Home</a></li>
+                    <li><a href="Gallery/gallery.html">Gallery</a></li>
+                    <li><a href="About-US/About US.html">About Us</a></li>
+                    <li><a href="upload.html">Upload</a></li>
+                </ul>
+            </nav>
+            <div class="menu-icon" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </header>
+
+        <div id="sidebar-menu">
+            <ul>
+              <li><a class="active" href="">Home</a></li>
+              <li><a href="Gallery/gallery.html">Gallery</a></li>
+              <li><a href="About-US/About US.html">About Us</a></li>
+              <li><a href="upload.html">Upload</a></li>
+            </ul>
+        </div>
+        <div id="overlay" onclick="toggleMenu()"></div> 
+
+
+        
+
+
+<div class="intro">
+    
+    <div class="text-container">
+        <h1>Farewell Nostalgia</h1>
+    </div>
+    <h3>Explore Stunning Farewell Photos</h3>
+    <p>Find and download amazing images from our vast collection.</p>
+    <button class='glowing-btn'><a href="Gallery/gallery.html"><span class='glowing-txt'>Ex<span class='faulty-letter'>pl</span>ore</span></a></button>
+</div>
+
+<div class="gallery">
+  <div class="w3-content">
+    <!-- Pagination and Download Multiple button container -->
+    <div class="pagination-container">
+        <div class="pagination" id="paginationTop">
+            <!-- Pagination buttons will be added here dynamically -->
+        </div>
+        
+    </div>
+
+    <!-- Photo Grid -->
+    <div class="w3-row-padding" id="photoGrid"></div>
+
+    <!-- Pagination and Download Multiple button container -->
+    <div class="pagination-container">
+        <div class="pagination" id="paginationBottom">
+            <!-- Pagination buttons will be added here dynamically -->
+        </div>
+    </div>
+
+    <!-- Modal for Image Preview -->
+    <div id="imageModal" class="w3-modal" onclick="closeModal()">
+        <div class="img-container" onclick="event.stopPropagation()">
+            <img id="modalImage">
+            <a id="modalDownloadBtn" class="download-btn" download>Download</a>
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+    </div>
+    
+</div>
+</div>
+  
+
+<script>
+    let currentPage = 1;
+
+const folderPaths = {
+    'folder1': 'https://www.pichub.co.uk/Photos-Webpage/Vintage/photos/', 
+    'folder2': 'https://www.pichub.co.uk/Photos-Webpage/Digital Painting/Photos/',
+    'folder3': 'https://www.pichub.co.uk/Photos-Webpage/Anime/Anime/Ai-art/',
+    'folder4': 'https://www.pichub.co.uk/Photos-Webpage/Anime/Anime/DBS/',
+    'folder5': 'https://www.pichub.co.uk/Photos-Webpage/Anime/Anime/demon-slayer/',
+    'folder6': 'https://www.pichub.co.uk/Photos-Webpage/Anime/Anime/Jujutsu-kaisen/',
+    'folder7': 'https://www.pichub.co.uk/Photos-Webpage/Anime/Anime/Naruto/',
+    'folder8': 'https://www.pichub.co.uk/Photos-Webpage/Anime/Anime/solo-leveling/',
+    'folder9': 'https://www.pichub.co.uk/Photos-Webpage/Anime/Anime/tokyo-ghoul/',
+    'folder10': 'https://www.pichub.co.uk/Photos-Webpage/Anime/Anime/tokyo-revengers/'
+    // Add more folders as needed
+};
+
+const imagesPerFolder = {
+    'folder1': 100, 
+    'folder2': 150, 
+    'folder3': 150,
+    'folder4': 35,
+    'folder5': 61,
+    'folder6': 45,
+    'folder7': 45,
+    'folder8': 36,
+    'folder9': 45,
+    'folder10': 45
+    // Add more folder configurations as needed
+};
+
+const totalImages = {
+    'folder1': 200, 
+    'folder2': 1462,  
+    'folder3': 1213,
+    'folder4': 55,
+    'folder5': 122,
+    'folder6': 93,
+    'folder7': 93,
+    'folder8': 74,
+    'folder9': 93,
+    'folder10': 93
+    // Add more folder total image counts as needed
+};
+
+// Custom download page links for each folder
+const downloadLinks = {
+    'folder1': 'https://www.pichub.co.uk/Photos-Webpage/Vintage/vintage-downloader', 
+    'folder2': 'https://www.pichub.co.uk/Photos-Webpage/Digital Painting/digital-downloader', 
+    'folder3': 'https://www.pichub.co.uk/Photos-Webpage/Anime/ai-art_anime-downloader', 
+    'folder4': 'https://www.pichub.co.uk/Photos-Webpage/Anime/DBS_anime-downloader', 
+    'folder5': 'https://www.pichub.co.uk/Photos-Webpage/Anime/demon-slayer_anime-downloader', 
+    'folder6': 'https://www.pichub.co.uk/Photos-Webpage/Anime/jujutsu-kaisen_anime-downloader', 
+    'folder7': 'https://www.pichub.co.uk/Photos-Webpage/Anime/naruto_anime-downloader', 
+    'folder8': 'https://www.pichub.co.uk/Photos-Webpage/Anime/solo-leveling_anime-downloader', 
+    'folder9': 'https://www.pichub.co.uk/Photos-Webpage/Anime/tokyo-ghoul_anime-downloader', 
+    'folder10': 'https://www.pichub.co.uk/Photos-Webpage/Anime/tokyo-revengers_anime-downloader'
+};
+
+// Open modal and display the image with download link
+function openModal(src, folder) {
+    const modalImage = document.getElementById('modalImage');
+    const imageModal = document.getElementById('imageModal');
+    const imgContainer = document.querySelector('#imageModal .img-container');
+    const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+
+    modalImage.src = src;
+
+    // Generate the download link dynamically
+    if (downloadLinks[folder]) {
+        const imageName = src.substring(src.lastIndexOf('/') + 1); // Extract the image name from the src
+        modalDownloadBtn.href = `${downloadLinks[folder]}?photo=${encodeURIComponent(imageName)}`;
+        modalDownloadBtn.download = imageName; // Set the download attribute with the image name
+    } else {
+        console.error(`Download link for folder "${folder}" not found.`);
+        modalDownloadBtn.href = '#';
+    }
+
+    imgContainer.style.width = 'auto';
+    imgContainer.style.height = 'auto';
+
+    imageModal.style.display = 'flex';
+
+    if (modalImage.complete) {
+        adjustModal();
+    } else {
+        modalImage.onload = adjustModal;
+    }
+
+    modalImage.onerror = function () {
+        console.error('Image failed to load.');
+        imageModal.style.display = 'none';
+    };
+
+    function adjustModal() {
+        const imgAspectRatio = modalImage.naturalWidth / modalImage.naturalHeight;
+        const containerAspectRatio = imgContainer.clientWidth / imgContainer.clientHeight;
+
+        if (imgAspectRatio > containerAspectRatio) {
+            imgContainer.style.width = '90%';
+            imgContainer.style.height = 'auto';
+        } else {
+            imgContainer.style.width = 'auto';
+            imgContainer.style.height = '90%';
+        }
+    }
+}
+
+// Close the modal
+function closeModal() {
+    document.getElementById('imageModal').style.display = 'none';
+}
+
+// Shuffle function to randomize image order
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+}
+
+// Function to load images dynamically
+function loadImages(page = 1) {
+    const w3RowPadding = document.getElementById('photoGrid');
+    const screenWidth = window.innerWidth;
+    let columnCount = 4;
+
+    if (screenWidth <= 1600) columnCount = (screenWidth > 1200) ? 3 : (screenWidth > 768) ? 2 : 1;
+
+    const totalImagesToLoad = Object.keys(folderPaths).reduce((acc, folder) => acc + imagesPerFolder[folder], 0);
+    const imagesToDisplay = totalImagesToLoad; // Total images to display for all folders
+    const startImage = imagesToDisplay - (page - 1) * totalImagesToLoad;
+    const endImage = Math.max(imagesToDisplay - page * totalImagesToLoad + 1, 1);
+
+    w3RowPadding.innerHTML = '';
+    for (let i = 0; i < columnCount; i++) {
+        const column = document.createElement('div');
+        column.classList.add('w3-column');
+        w3RowPadding.appendChild(column);
+    }
+
+    let loadedImages = 0;
+    const totalToLoad = startImage - endImage + 1;
+    const loadComplete = () => {
+        loadedImages++;
+        if (loadedImages === totalToLoad) {
+            w3RowPadding.classList.add('show');
+        }
+    };
+
+    // Create an array of image indices from all folders
+    const imageIndices = [];
+    Object.keys(folderPaths).forEach(folder => {
+        for (let i = 1; i <= imagesPerFolder[folder]; i++) {
+            imageIndices.push({ folder, index: i });
+        }
+    });
+
+    shuffleArray(imageIndices); // Shuffle image indices randomly
+
+    // Load images based on shuffled order
+    imageIndices.forEach((imageData, i) => {
+        const imgContainer = document.createElement('div');
+        imgContainer.classList.add('img-container');
+
+        const img = document.createElement('img');
+        img.src = ''; // Empty src initially for lazy loading
+        img.dataset.src = `${folderPaths[imageData.folder]}${imageData.index}.jpg`; // The actual image path to load
+        img.alt = `Image ${imageData.index}`;
+        img.setAttribute('loading', 'lazy'); // Add lazy loading attribute
+        img.addEventListener('click', () => openModal(img.src, imageData.folder));
+
+        img.onload = loadComplete;
+        img.onerror = loadComplete;
+
+        imgContainer.appendChild(img);
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'image-checkbox';
+        imgContainer.appendChild(checkbox);
+
+        const previewText = document.createElement('div');
+        previewText.classList.add('preview-text');
+        previewText.textContent = 'Preview';
+
+        imgContainer.appendChild(previewText);
+
+        w3RowPadding.children[i % columnCount].appendChild(imgContainer);
+
+        // Using IntersectionObserver for lazy loading
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const image = entry.target;
+                    image.src = image.dataset.src; // Set the image src when it's in view
+                    observer.unobserve(image); // Stop observing once the image is loaded
+                }
+            });
+        }, {
+            rootMargin: '200px', // Start loading 200px before the image is in the viewport
+        });
+
+        observer.observe(img);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Load images initially from all folders
+    loadImages(currentPage);
+});
+
+</script>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var consent = document.getElementById("cookieConsent");
+        var consentButton = document.getElementById("cookieConsentButton");
+
+        // Check if the user has already seen the consent popup
+        if (!sessionStorage.getItem("cookieConsentSeen")) {
+            // Show the consent popup
+            consent.style.display = "block";
+        }
+
+        // Hide the popup and set session storage item when the button is clicked
+        consentButton.onclick = function () {
+            consent.style.display = "none";
+            sessionStorage.setItem("cookieConsentSeen", "true");
+        };
+    });
+</script>
+
+
+
+  <script>document.getElementById('subscriptionForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const email = document.getElementById('email').value;
+
+    // Prepare data to send
+    const formData = {
+        email: email
+    };
+
+    // Send data to the backend
+    fetch('https://tick-full-lobster.ngrok-free.app/', {  // Replace with your actual URL
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    }).then(response => response.text())
+      .then(result => {
+          document.getElementById('message').textContent = result;
+      }).catch(error => {
+          console.error('Error:', error);
+          document.getElementById('message').textContent = 'An error occurred.';
+      });
+});
+</script>
+
+
+
+<script>
+    // JavaScript to handle the header fade in and out on scroll
+    let lastScrollTop = 0;
+    const header = document.querySelector('header');
+
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop) {
+            // Downscroll
+            header.classList.add('hidden');
+        } else {
+            // Upscroll
+            header.classList.remove('hidden');
+        }
+        lastScrollTop = scrollTop;
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<footer>
+    <div class="footer-wrapper">
+      <div class="footer-section">
+        <div class="footer-subscribe">
+          <h2>
+            Send us more photos to showcase your farewell memories!
+          </h2>
+          <a href="upload.html" class="upload">Upload Photos!!</a>
+            <div id="message"></div>
+          </div>
+       
+        <nav class="footer-nav">
+          <div>
+            <h2>Credits</h2>
+            <ul>
+            <li>Website Owned and Managed by <a href="https://www.instagram.com/aayush_rajgupta">Aayush Raj Gupta</a><br></li>
+            <li>Resources by <a href="https://www.instagram.com/762_sagar"> Sagar Bhakt Sinha</a><br></li>
+            <li>Ideas by <a href="https://www.instagram.com/sahilsingh.fr"> Sahil Singh</a><br></li>
+          </ul>
+          </div>
+          <div>
+            <h2>Connect To Us</h2>
+            <ul>
+              <li><a href="mailto:nostalgiafarewell@gmail.com">Email</a></li>
+              <li><a href="https://www.instagram.com/pichub__official/">Instgram</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer-copyright">
+        <p>©2025 Farewell Nostalgia, Inc. All rights reserved.</p>
+        <p>Privacy Policy.</p>
+        <p>Terms of Use.<strong> Powred By <a href="https://www.pichub.co.uk">PicHub.co.uk</a></strong></p>
+      </div>
+    </div>
+  </footer>
+
+
+    
+</body>
+</html>
